@@ -15,3 +15,9 @@ python src/manage.py migrate
 python src/manage.py createsuperuser
 python src/manage.py runserver
 ```
+
+## disclaimer
+
+This is a work in progress.
+There is probably no interest for anyone except me in this code :)
+Feel free to use some code found here.
