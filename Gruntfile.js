@@ -1,12 +1,31 @@
 module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
+	var SCSS = {
+		'src/assets/css/styles.css': 'src/assets/scss/styles.scss'
+	};
 	var BUNDLES = {
 		'src/assets/js/landing.bundle.js': ['src/assets/js/landing.js']
 	};
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+
+		sass: {
+			dev: {
+				options: {
+					sourceMap: true
+				},
+				files: SCSS
+			},
+			dist: {
+				options: {
+					sourceMap: false,
+					outputStyle: 'compressed'
+				},
+				files: SCSS
+			}
+		},
 
 		browserify: {
 			dev: {
@@ -54,6 +73,12 @@ module.exports = function (grunt) {
 					livereload: true,
 					interrupt: true
 				}
+			},
+			sass: {
+				files: [
+					'src/assets/scss/**/*.scss'
+				],
+				tasks: ['sass:dev']
 			}
 		},
 
@@ -62,6 +87,6 @@ module.exports = function (grunt) {
 		}
 	});
 
-	grunt.registerTask('default', ['browserify:dev', 'watch']);
-	grunt.registerTask('build', ['browserify:dist']);
+	grunt.registerTask('default', ['browserify:dev', 'sass:dev', 'watch']);
+	grunt.registerTask('build', ['browserify:dist', 'sass:dist']);
 };
