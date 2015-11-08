@@ -1,5 +1,5 @@
 """
-WSGI config for src project.
+WSGI config for harmonic project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

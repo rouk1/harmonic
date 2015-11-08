@@ -1,0 +1,22 @@
+{
+  "name": "harmonic-v2",
+  "version": "1.0.0",
+  "description": "mobile friendly with django, sass and browserify",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "WTFPL",
+  "dependencies": {
+    "babel-preset-es2015": "^6.1.2",
+    "babelify": "^7.2.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.1",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^3.3.0",
+    "stringify": "^3.1.0",
+    "uglifyify": "^3.0.1"
+  }
+}
