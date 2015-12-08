@@ -14,10 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-import admin
+from . import admin
 
 urlpatterns = [
-    url(r'^$', include('catalog.urls', namespace='catalog')),
+    url(r'^', include('catalog.urls', namespace='catalog')),
 
     url(r'^admin/', include(admin.site.urls)),
 ]

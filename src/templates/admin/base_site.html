@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+
+{% block footer %}
+    {{ block.super }}
+    {% if debug %}
+    <!-- livereload -->
+    <script>
+    document.write(
+        '<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+        + ':35729/livereload.js?snipver=1"></'
+        + 'script>'
+    );
+    </script>
+    <!-- livereload -->
+    {% endif %}
+{% endblock %}

@@ -4,29 +4,28 @@
 
 '''
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
-from django.forms import forms
 from django.shortcuts import render
+from legacy.importer import ImportLegacyDatabaseForm, import_zip
 
 
 class HarmonicAdminSite(admin.AdminSite):
     '''override admin site to add custom views'''
-    site_header = u'Harmonic'
+    site_header = 'Harmonic'
+    site_title = 'Harmonic Administration'
 
     def import_legacy_catalog(self, request):
         if request.method == 'POST':
-            form = ImportForm(request.POST, request.FILES)
+            form = ImportLegacyDatabaseForm(request.POST, request.FILES)
             if form.is_valid():
-                f = request.FILES['backup']
-                sql_data = f.read()
-                import_all(sql_data)
+                import_zip(request.FILES['zip_file'])
 
                 messages.success(request, 'youhou')
         else:
-            form = ImportForm()
+            form = ImportLegacyDatabaseForm()
 
         context = {
             'form': form
@@ -35,14 +34,13 @@ class HarmonicAdminSite(admin.AdminSite):
 
     def get_urls(self):
         urls = super(HarmonicAdminSite, self).get_urls()
-        extra_urls = patterns(
-            '',
+        extra_urls = [
             url(
                 r'^import/$',
                 self.admin_view(self.import_legacy_catalog),
                 name='import_database'
-            )
-        )
+            ),
+        ]
 
         return extra_urls + urls
 

@@ -1,21 +1,14 @@
-from __future__ import print_function
-
 import atexit
 import os
 import psutil
 import subprocess
-import sys
 import traceback
-
-from signal import SIGTERM
-
 from concurrent.futures import ThreadPoolExecutor
-
-from django.contrib.staticfiles.management.commands.runserver import Command \
-    as StaticfilesRunserverCommand
+from django.contrib.staticfiles.management.commands.runserver import (
+    Command as StaticfilesRunserverCommand
+)
 from django.core.management.base import CommandError
-from django.core.servers import basehttp
-from django.conf import settings
+from signal import SIGTERM
 
 
 class Command(StaticfilesRunserverCommand):
@@ -73,7 +66,7 @@ class Command(StaticfilesRunserverCommand):
     def start_grunt(self):
         self.stdout.write('>>> Starting grunt')
 
-        grunt_command = 'grunt'
+        grunt_command = 'node -e "require(\'grunt\').tasks([\'default\']);"'
         self.grunt_process = subprocess.Popen(
             [grunt_command],
             shell=True,

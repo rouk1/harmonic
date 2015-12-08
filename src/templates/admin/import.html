@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block bodyclass %}{{ block.super }} app-{{ app_label }}{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; Import legacy site content
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<h1>Import legacy site content</h1>
+<p style="margin-top: 5px; font-style: italic;">As a ZIP file</p>
+<div id="content-main">
+	<form action="" enctype="multipart/form-data" method="post">
+		{% csrf_token %}
+		<fieldset class="module aligned wide">
+			{% for field in form %}
+				<div class="form-row">
+					<div>
+						{% if field.errors %}
+							{% for error in field.errors %}
+								<p style="color: red">Oh no! {{ error }}</p>
+							{% endfor %}
+						{% endif %}
+						{{ field.label_tag }}{{ field }}
+						{% if field.field.help_text %}
+							<p class="help">{{ field.field.help_text|safe }}</p>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</fieldset>
+		<div class="submit-row">
+			<input type="submit" value="Import" class="default"/>
+		</div>
+	</form>
+</div>
+<br class="clear" />
+{% endblock %}

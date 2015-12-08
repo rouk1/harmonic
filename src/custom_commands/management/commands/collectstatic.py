@@ -1,16 +1,16 @@
-import os
-import subprocess
 import shlex
+import subprocess
 
-from django.conf import settings
-from django.contrib.staticfiles.management.commands.collectstatic import \
+from django.contrib.staticfiles.management.commands.collectstatic import (
     Command as BaseCommand
+)
 
 
 class Command(BaseCommand):
     """
     A version of collectstatic that runs `grunt build` first.
     """
+
     def handle(self, *args, **options):
         if options['dry_run']:
             return
