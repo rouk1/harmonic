@@ -2,7 +2,9 @@
   $(document).ready(function () {
     $('.simple-mde-editor').each(function () {
       var e = new SimpleMDE({
-        element: this
+        element: this,
+        status: false,
+        spellChecker: false
       })
       e.value($(this.id).val())
     })

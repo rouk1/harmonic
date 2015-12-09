@@ -23,9 +23,12 @@ class HarmonicAdminSite(admin.AdminSite):
         if request.method == 'POST':
             form = ImportLegacyDatabaseForm(request.POST, request.FILES)
             if form.is_valid():
-                import_zip(request.FILES['zip_file'])
-
-                messages.success(request, 'youhou')
+                feedbacks = import_zip(request.FILES['zip_file'])
+                for (error, feedback) in feedbacks:
+                    if error > 0:
+                        messages.error(request, feedback)
+                    else:
+                        messages.success(request, feedback)
         else:
             form = ImportLegacyDatabaseForm()
 
