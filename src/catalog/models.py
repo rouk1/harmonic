@@ -20,6 +20,8 @@ class Page(SeoModel):
     title = models.CharField(max_length=255)
     content = MarkdownField()
 
+    def __unicode__(self):
+        return 'Page: {}'.format(set.slug)
 
 class Section(models.Model):
     title = models.CharField(max_length=128)

@@ -5,3 +5,5 @@ django-toolbelt==0.0.1
 gunicorn==19.4.1
 psycopg2==2.6.1
 static3==0.6.1
+django-modeltranslation==0.11rc1
+

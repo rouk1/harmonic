@@ -18,6 +18,7 @@ INTERNAL_IPS = (
 
 INSTALLED_APPS = (
     'custom_commands',
+    'modeltranslation',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -74,7 +75,7 @@ DATABASES['default'].update(DB_URL)
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
@@ -89,4 +90,11 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
+)
+
+# translations
+gettext = lambda s: s
+LANGUAGES = (
+    ('fr', gettext('Français')),
+    ('en', gettext('English')),
 )
