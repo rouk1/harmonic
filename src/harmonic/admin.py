@@ -3,13 +3,15 @@
 '''
 
 '''
-
+from catalog.admin import PageAdmin
+from catalog.models import Page
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render
 from legacy.importer import ImportLegacyDatabaseForm, import_zip
+
 
 
 class HarmonicAdminSite(admin.AdminSite):
@@ -51,3 +53,6 @@ site = HarmonicAdminSite()
 # auth
 site.register(User, UserAdmin)
 site.register(Group, GroupAdmin)
+
+# catalog
+site.register(Page, PageAdmin)

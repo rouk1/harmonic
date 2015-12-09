@@ -12,7 +12,7 @@ __author__ = 'rouk1'
 
 
 class ImportLegacyDatabaseForm(forms.Form):
-    zip_file = forms.FileField(required=True, help_text='zip file from old site')
+    zip_file = forms.FileField(required=True, help_text='zip file from o    ld site')
 
 
 def import_page(name, path):

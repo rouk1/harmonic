@@ -1,3 +1,7 @@
+from catalog.widgets import SimpleMDEEditor
 from django.contrib import admin
+from django.db import models
 
-# Register your models here.
+
+class PageAdmin(admin.ModelAdmin):
+    pass
