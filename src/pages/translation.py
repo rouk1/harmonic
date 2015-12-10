@@ -21,4 +21,4 @@ class HomePagePushTranslationOptions(TranslationOptions):
 
 @register(Album)
 class AlbumTranslationOptions(TranslationOptions):
-    fields = ('description', 'musicological_text', 'instrument_text', 'press_review',)
+    fields = ('description', 'musicological_text', 'instrument_name', 'instrument_text', 'press_review',)

@@ -33,3 +33,6 @@ class Album(SeoModel):
     instrument_text = MarkdownField()
     track_list = MarkdownField()
     press_review = MarkdownField()
+
+    def __str__(self):
+        return '{} - {}'.format(self.reference, self.title)

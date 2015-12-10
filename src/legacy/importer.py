@@ -5,11 +5,11 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
-from catalog.models import Section, Artist
-from pages.models import Page, HomePage, HomePagePush
+from catalog.models import Section, Artist, Album
 from django.forms import forms
 from django.utils import translation
 from django.utils.text import slugify
+from pages.models import Page, HomePage, HomePagePush
 from . import models
 
 __author__ = 'rouk1'
@@ -17,6 +17,7 @@ __author__ = 'rouk1'
 
 class ImportLegacyDatabaseForm(forms.Form):
     zip_file = forms.FileField(required=True, help_text='zip file from old site')
+
 
 def copy_seo_data(target, data):
     target.seo_keywords = data.keywords
@@ -28,6 +29,7 @@ def copy_seo_data(target, data):
     translation.activate('fr')
     target.seo_description = data.description_fr
     translation.deactivate()
+
 
 def import_page(name, path):
     with open(os.path.join(path, name, 'data'), 'rb') as f:
@@ -132,6 +134,47 @@ def import_artist(name, path):
         a.save()
 
 
+def import_album(name, path):
+    with open(os.path.join(path, name, 'data'), 'rb') as f:
+        data = pickle.load(f)
+
+        a = Album()
+        copy_seo_data(a, data)
+
+        a.is_published = data.published
+        a.title = data.title
+        a.reference = data.reference
+
+        a.itunes_url = data.itunes_url
+        a.is_digital_release = data.digital_release
+        a.track_list = html2text.html2text(data.track_list)
+
+        translation.activate('en')
+        a.description = html2text.html2text(data.description_en)
+        a.musicological_text = html2text.html2text(data.music_text_en)
+        a.instrument_name = data.insturment_name_en
+        a.instrument_text = html2text.html2text(data.instrument_text_en)
+        a.press_review = html2text.html2text(data.review_en)
+        translation.deactivate()
+
+        translation.activate('fr')
+        a.description = html2text.html2text(data.description_fr)
+        a.musicological_text = html2text.html2text(data.music_text_fr)
+        a.instrument_name = data.insturment_name_fr
+        a.instrument_text = html2text.html2text(data.instrument_text_fr)
+        a.press_review = html2text.html2text(data.review_fr)
+        translation.deactivate()
+
+        # FIXME get many to many
+        # a.sections = data.section
+        # a.artists = data.artist
+
+        # FIXME get cover
+        # a.cover = data.cover
+        # a.instrument_photo = data.instrument_photo
+
+        a.save()
+
 
 def import_zip(zip_file):
     feedback = []
@@ -177,6 +220,18 @@ def import_zip(zip_file):
                 count += 1
 
             feedback.append((0, '{:d} artist(s) imported'.format(count)))
+
+            # delete
+            Album.objects.all().delete()
+
+            # import
+            count = 0
+            section_extracted_data = os.path.join(extract_path, 'album')
+            for dir in os.listdir(section_extracted_data):
+                import_album(dir, section_extracted_data)
+                count += 1
+
+            feedback.append((0, '{:d} album(s) imported'.format(count)))
 
             del sys.modules['models']
 

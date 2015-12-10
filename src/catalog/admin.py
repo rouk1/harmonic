@@ -11,4 +11,4 @@ class ArtistAdmin(TranslationAdmin):
 
 
 class AlbumAdmin(SeoAdmin, TranslationAdmin):
-    pass
+    filter_horizontal = ('sections', 'artists',)
