@@ -3,8 +3,8 @@
 '''
 
 '''
-from catalog.admin import SectionAdmin, ArtistAdmin
-from catalog.models import Section, Artist
+from catalog.admin import SectionAdmin, ArtistAdmin, AlbumAdmin
+from catalog.models import Section, Artist, Album
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
@@ -65,3 +65,4 @@ site.register(HomePage, HomePageAdmin)
 # catalog
 site.register(Section, SectionAdmin)
 site.register(Artist, ArtistAdmin)
+site.register(Album, AlbumAdmin)

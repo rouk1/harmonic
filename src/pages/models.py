@@ -22,6 +22,8 @@ class HomePage(SeoModel, SingletonModel):
 
 
 class HomePagePush(models.Model):
+    # FIXME add a published boolean
+    # put them in the home page
     home_page = models.ForeignKey('HomePage')
     title = models.CharField(max_length=128)
     content = MarkdownField()

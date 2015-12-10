@@ -19,14 +19,14 @@ class ImportLegacyDatabaseForm(forms.Form):
     zip_file = forms.FileField(required=True, help_text='zip file from old site')
 
 def copy_seo_data(target, data):
-    target.keywords = data.keywords
+    target.seo_keywords = data.keywords
 
     translation.activate('en')
-    target.description = data.description_en
+    target.seo_description = data.description_en
     translation.deactivate()
 
     translation.activate('fr')
-    target.description = data.description_fr
+    target.seo_description = data.description_fr
     translation.deactivate()
 
 def import_page(name, path):

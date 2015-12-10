@@ -8,3 +8,7 @@ class SectionAdmin(SeoAdmin, TranslationAdmin):
 
 class ArtistAdmin(TranslationAdmin):
     pass
+
+
+class AlbumAdmin(SeoAdmin, TranslationAdmin):
+    pass
