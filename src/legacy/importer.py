@@ -5,7 +5,8 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
-from catalog.models import Page, HomePage, HomePagePush
+from catalog.models import Section
+from pages.models import Page, HomePage, HomePagePush
 from django.forms import forms
 from django.utils import translation
 from django.utils.text import slugify
@@ -17,29 +18,38 @@ __author__ = 'rouk1'
 class ImportLegacyDatabaseForm(forms.Form):
     zip_file = forms.FileField(required=True, help_text='zip file from old site')
 
+def copy_seo_data(target, data):
+    target.keywords = data.keywords
+
+    translation.activate('en')
+    target.description = data.description_en
+    translation.deactivate()
+
+    translation.activate('fr')
+    target.description = data.description_fr
+    translation.deactivate()
 
 def import_page(name, path):
     with open(os.path.join(path, name, 'data'), 'rb') as f:
         data = pickle.load(f)
 
         def copy_data(target, data):
+            copy_seo_data(target, data)
             translation.activate('en')
             target.content = html2text.html2text(data.text_en)
-            target.description = data.description_en
             translation.deactivate()
 
             translation.activate('fr')
             target.content = html2text.html2text(data.text_fr)
-            target.description = data.description_fr
             translation.deactivate()
 
         if isinstance(data, models.HomePage):
-            hp = HomePage()
-            hp.keywords = data.keywords
+            hp = HomePage.get_solo()
 
             copy_data(hp, data)
 
             push = HomePagePush()
+            push.home_page = hp
             translation.activate('en')
             push.title = data.push_title_en
             push.content = html2text.html2text(data.push_content_en)
@@ -55,7 +65,6 @@ def import_page(name, path):
 
         else:
             p = Page()
-            p.keywords = data.keywords
             p.slug = slugify(data.title_en.lower())
 
             copy_data(p, data)
@@ -74,6 +83,32 @@ def import_page(name, path):
             p.save()
 
 
+def import_section(name, path):
+    with open(os.path.join(path, name, 'data'), 'rb') as f:
+        data = pickle.load(f)
+
+        s = Section()
+        copy_seo_data(s, data)
+
+        if data.title_color == 'black':
+            s.title_color = '#000000'
+        else:
+            s.title_color = '#ffffff'
+
+        translation.activate('en')
+        s.title = data.title_en
+        translation.deactivate()
+
+        translation.activate('fr')
+        s.title = data.title_fr
+        translation.deactivate()
+
+        # FIXME store background image
+        if hasattr(data, 'background'):
+            pass
+
+        s.save()
+
 def import_zip(zip_file):
     feedback = []
     with ZipFile(zip_file) as zip:
@@ -82,16 +117,30 @@ def import_zip(zip_file):
 
             sys.modules['models'] = models
 
-            site_extracted_data = os.path.join(extract_path, 'site')
-            count = 0
-
+            # delete
             Page.objects.all().delete()
             HomePagePush.objects.all().delete()
+
+            # import
+            count = 0
+            site_extracted_data = os.path.join(extract_path, 'site')
             for dir in os.listdir(site_extracted_data):
                 import_page(dir, site_extracted_data)
                 count += 1
 
             feedback.append((0, '{:d} page(s) imported'.format(count)))
+
+            # delete
+            Section.objects.all().delete()
+
+            # import
+            count = 0
+            section_extracted_data = os.path.join(extract_path, 'section')
+            for dir in os.listdir(section_extracted_data):
+                import_section(dir, section_extracted_data)
+                count += 1
+
+            feedback.append((0, '{:d} section(s) imported'.format(count)))
 
             del sys.modules['models']
 

@@ -8,12 +8,12 @@ class SimpleMDEEditor(Textarea):
     class Media:
         js = (
             '//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js',
-            'catalog/admin/js/editor.js',
+            'admin/js/editor.js',
         )
         css = {
             'all': (
                 '//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css',
-                'catalog/admin/css/editor.css',
+                'admin/css/editor.css',
             )
         }
 

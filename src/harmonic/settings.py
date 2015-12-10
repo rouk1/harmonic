@@ -20,6 +20,7 @@ INSTALLED_APPS = (
     'custom_commands',
     'modeltranslation',
     'solo',
+    'colorfield',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,6 +29,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'pages',
     'catalog',
 )
 

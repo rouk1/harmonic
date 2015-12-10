@@ -9,7 +9,7 @@ class PersistentObject(object):
 
 
 class Artist(PersistentObject):
-    '''an artist that has recorded a disc in the catalog'''
+    '''an artist that has recorded a disc in the pages'''
 
     prefix = 'artist'
 
@@ -18,7 +18,7 @@ class Artist(PersistentObject):
 
 
 class Album(PersistentObject):
-    '''an album off the catalog'''
+    '''an album off the pages'''
 
     prefix = 'album'
 
@@ -27,7 +27,7 @@ class Album(PersistentObject):
 
 
 class Section(PersistentObject):
-    '''an section off the catalog'''
+    '''an section off the pages'''
 
     prefix = 'section'
 
@@ -36,7 +36,7 @@ class Section(PersistentObject):
 
 
 class Page(PersistentObject):
-    '''an section off the catalog'''
+    '''an section off the pages'''
 
     prefix = 'site'
 
@@ -45,5 +45,5 @@ class Page(PersistentObject):
 
 
 class HomePage(Page):
-    '''an section off the catalog'''
+    '''an section off the pages'''
     pass
