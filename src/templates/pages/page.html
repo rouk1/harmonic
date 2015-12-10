@@ -1,0 +1,10 @@
+{% extends "base_site.html" %}
+{% load staticfiles harmonic %}
+
+{% block head %}
+<title>{{ page.title }}</title>
+{% endblock %}
+
+{% block content %}
+{{ page.content|markdown }}
+{% endblock %}
