@@ -19,6 +19,7 @@ INTERNAL_IPS = (
 INSTALLED_APPS = (
     'custom_commands',
     'modeltranslation',
+    'solo',
 
     'django.contrib.admin',
     'django.contrib.auth',

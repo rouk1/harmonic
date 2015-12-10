@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
-from catalog.models import Page
+from catalog.models import Page, HomePage, HomePagePush
 from django.forms import forms
 from django.utils import translation
 from django.utils.text import slugify
@@ -22,26 +22,52 @@ def import_page(name, path):
     with open(os.path.join(path, name, 'data'), 'rb') as f:
         data = pickle.load(f)
 
+        def copy_data(target, data):
+            translation.activate('en')
+            target.content = html2text.html2text(data.text_en)
+            target.description = data.description_en
+            translation.deactivate()
+
+            translation.activate('fr')
+            target.content = html2text.html2text(data.text_fr)
+            target.description = data.description_fr
+            translation.deactivate()
+
         if isinstance(data, models.HomePage):
-            pass
+            hp = HomePage()
+            hp.keywords = data.keywords
+
+            copy_data(hp, data)
+
+            push = HomePagePush()
+            translation.activate('en')
+            push.title = data.push_title_en
+            push.content = html2text.html2text(data.push_content_en)
+            translation.deactivate()
+
+            translation.activate('fr')
+            push.title = data.push_title_fr
+            push.content = html2text.html2text(data.push_content_fr)
+            translation.deactivate()
+            push.save()
+
+            hp.save()
+
         else:
             p = Page()
             p.keywords = data.keywords
             p.slug = slugify(data.title_en.lower())
 
+            copy_data(p, data)
             translation.activate('en')
             p.title = data.title_en
-            p.content = html2text.html2text(data.text_en)
-            p.description = data.description_en
             translation.deactivate()
 
             translation.activate('fr')
             p.title = data.title_fr
-            p.content = html2text.html2text(data.text_fr)
-            p.description = data.description_fr
             translation.deactivate()
 
-            # FIXME store backgroudn image
+            # FIXME store background image
             if hasattr(data, 'background'):
                 pass
 
@@ -60,6 +86,7 @@ def import_zip(zip_file):
             count = 0
 
             Page.objects.all().delete()
+            HomePagePush.objects.all().delete()
             for dir in os.listdir(site_extracted_data):
                 import_page(dir, site_extracted_data)
                 count += 1
