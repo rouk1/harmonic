@@ -1,5 +1,6 @@
 from colorfield.fields import ColorField
 from django.db import models
+from harmonic.fields import MarkdownField
 from harmonic.mixins import SeoModel
 
 
@@ -9,3 +10,11 @@ class Section(SeoModel):
 
     def __str__(self):
         return self.title
+
+
+class Artist(models.Model):
+    name = models.CharField(max_length=128)
+    bio = MarkdownField()
+
+    def __str__(self):
+        return self.name

@@ -4,3 +4,7 @@ from modeltranslation.admin import TranslationAdmin
 
 class SectionAdmin(SeoAdmin, TranslationAdmin):
     pass
+
+
+class ArtistAdmin(TranslationAdmin):
+    pass

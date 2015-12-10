@@ -3,8 +3,8 @@
 '''
 
 '''
-from catalog.admin import SectionAdmin
-from catalog.models import Section
+from catalog.admin import SectionAdmin, ArtistAdmin
+from catalog.models import Section, Artist
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
@@ -33,9 +33,9 @@ class HarmonicAdminSite(admin.AdminSite):
         else:
             form = ImportLegacyDatabaseForm()
 
-        context = {
-            'form': form
-        }
+        context = self.each_context(request)
+        context['form'] = form
+        
         return render(request, 'admin/import.html', context)
 
     def get_urls(self):
@@ -64,3 +64,4 @@ site.register(HomePage, HomePageAdmin)
 
 # catalog
 site.register(Section, SectionAdmin)
+site.register(Artist, ArtistAdmin)

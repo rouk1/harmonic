@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
-from catalog.models import Section
+from catalog.models import Section, Artist
 from pages.models import Page, HomePage, HomePagePush
 from django.forms import forms
 from django.utils import translation
@@ -109,6 +109,30 @@ def import_section(name, path):
 
         s.save()
 
+
+def import_artist(name, path):
+    with open(os.path.join(path, name, 'data'), 'rb') as f:
+        data = pickle.load(f)
+
+        a = Artist()
+        a.name = data.name
+
+        translation.activate('en')
+        a.bio = html2text.html2text(data.bio_en)
+        translation.deactivate()
+
+        translation.activate('fr')
+        a.bio = html2text.html2text(data.bio_fr)
+        translation.deactivate()
+
+        # FIXME store image
+        if hasattr(data, 'photo'):
+            pass
+
+        a.save()
+
+
+
 def import_zip(zip_file):
     feedback = []
     with ZipFile(zip_file) as zip:
@@ -141,6 +165,18 @@ def import_zip(zip_file):
                 count += 1
 
             feedback.append((0, '{:d} section(s) imported'.format(count)))
+
+            # delete
+            Artist.objects.all().delete()
+
+            # import
+            count = 0
+            section_extracted_data = os.path.join(extract_path, 'artist')
+            for dir in os.listdir(section_extracted_data):
+                import_artist(dir, section_extracted_data)
+                count += 1
+
+            feedback.append((0, '{:d} artist(s) imported'.format(count)))
 
             del sys.modules['models']
 
