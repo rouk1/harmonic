@@ -33,6 +33,7 @@ class Album(SeoModel):
     instrument_text = MarkdownField()
     track_list = MarkdownField()
     press_review = MarkdownField()
+    cover = models.ForeignKey('renderer.MasterImage')
 
     def __str__(self):
         return '{} - {}'.format(self.reference, self.title)

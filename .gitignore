@@ -105,6 +105,7 @@ sftp-config.json
 venv
 node_modules
 src/db.sqlite3
+src/media/
 staticfiles/
 .coverage
 htmlcov/

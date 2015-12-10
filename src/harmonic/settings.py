@@ -21,6 +21,7 @@ INSTALLED_APPS = (
     'modeltranslation',
     'solo',
     'colorfield',
+    'renderer',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -98,6 +99,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # translations
 gettext = lambda s: s

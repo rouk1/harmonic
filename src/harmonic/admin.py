@@ -13,6 +13,8 @@ from django.shortcuts import render
 from legacy.importer import ImportLegacyDatabaseForm, import_zip
 from pages.admin import PageAdmin, HomePageAdmin
 from pages.models import Page, HomePage
+from renderer.admin import MasterImageAdmin
+from renderer.models import MasterImage
 
 
 class HarmonicAdminSite(admin.AdminSite):
@@ -57,6 +59,9 @@ site = HarmonicAdminSite()
 # auth
 site.register(User, UserAdmin)
 site.register(Group, GroupAdmin)
+
+# renderer
+site.register(MasterImage, MasterImageAdmin)
 
 # pages
 site.register(Page, PageAdmin)

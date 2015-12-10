@@ -5,11 +5,15 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
+from PIL import Image
 from catalog.models import Section, Artist, Album
+from django.core.files.base import File
+from django.db import transaction
 from django.forms import forms
 from django.utils import translation
 from django.utils.text import slugify
 from pages.models import Page, HomePage, HomePagePush
+from renderer.models import MasterImage
 from . import models
 
 __author__ = 'rouk1'
@@ -165,17 +169,37 @@ def import_album(name, path):
         a.press_review = html2text.html2text(data.review_fr)
         translation.deactivate()
 
-        # FIXME get many to many
-        # a.sections = data.section
-        # a.artists = data.artist
+        cover_path = os.path.join(path, '..', data.cover)
+        cover_path = os.path.normpath(cover_path)
 
-        # FIXME get cover
-        # a.cover = data.cover
-        # a.instrument_photo = data.instrument_photo
+        #test file
+        img = Image.open(cover_path)
+        img.verify()
+
+        with open(cover_path, 'rb') as cover:
+            master_image = MasterImage(
+                alternate_text='{}-cover'.format(a.reference)
+            )
+            master_image.master.save(os.path.basename(data.cover), File(cover))
+            master_image.save()
+            a.cover = master_image
 
         a.save()
 
+        translation.activate('fr')
+        section = Section.objects.get(title__iexact=data.section)
+        a.sections.add(section)
+        translation.deactivate()
 
+        for artist in data.artist:
+            a.artists.add(Artist.objects.get(name__iexact=artist))
+
+
+            # a.cover = data.cover
+            # a.instrument_photo = data.instrument_photo
+
+
+@transaction.atomic
 def import_zip(zip_file):
     feedback = []
     with ZipFile(zip_file) as zip:
@@ -183,6 +207,9 @@ def import_zip(zip_file):
             zip.extractall(extract_path)
 
             sys.modules['models'] = models
+
+            # delete all master iamges
+            MasterImage.objects.all().delete()
 
             # delete
             Page.objects.all().delete()

@@ -22,3 +22,16 @@ class SeoAdmin(object):
                 'fields': seo_fields,
             })
         ]
+
+class PublishableMixin(object):
+    actions = ['make_published', 'make_unpublished']
+
+    def make_published(self, request, queryset):
+        queryset.update(is_published=True)
+
+    make_published.short_description = 'Mark selected items as published'
+
+    def make_unpublished(self, request, queryset):
+        queryset.update(is_published=False)
+
+    make_unpublished.short_description = 'Mark selected items as unpublished'
