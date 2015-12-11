@@ -4,12 +4,31 @@ from modeltranslation.admin import TranslationAdmin
 from renderer.widgets import MasterImageAdminMixin
 
 
-class SectionAdmin(SeoAdmin, TranslationAdmin):
-    pass
+class SectionAdmin(MasterImageAdminMixin, SeoAdmin, TranslationAdmin):
+    list_display = ('title', 'get_background',)
+    list_display_links = ('title', 'get_background',)
+
+    def get_background(self, obj):
+        '''admin image tag for easy browse'''
+        t = (obj.background.get_rendition_url(100), obj.background.alternate_text)
+        return '<img src="%s" alt="%s"/>' % t
+
+    get_background.allow_tags = True
+    get_background.short_description = _('background')
 
 
-class ArtistAdmin(TranslationAdmin):
+class ArtistAdmin(MasterImageAdminMixin, TranslationAdmin):
     search_fields = ('name', 'bio',)
+    list_display = ('get_photo', 'name',)
+    list_display_links = ('get_photo', 'name',)
+
+    def get_photo(self, obj):
+        '''admin image tag for easy browse'''
+        t = (obj.photo.get_rendition_url(100), obj.photo.alternate_text)
+        return '<img src="%s" alt="%s"/>' % t
+
+    get_photo.allow_tags = True
+    get_photo.short_description = _('photo')
 
 
 class AlbumAdmin(MasterImageAdminMixin, SeoAdmin, TranslationAdmin, PublishableMixin):

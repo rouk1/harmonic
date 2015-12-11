@@ -7,6 +7,11 @@ from harmonic.mixins import SeoModel
 class Section(SeoModel):
     title = models.CharField(max_length=128)
     title_color = ColorField(default='#000000')
+    background = models.ForeignKey(
+        'renderer.MasterImage',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.title
@@ -15,6 +20,11 @@ class Section(SeoModel):
 class Artist(models.Model):
     name = models.CharField(max_length=128)
     bio = MarkdownField()
+    photo = models.ForeignKey(
+        'renderer.MasterImage',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.name
@@ -23,6 +33,10 @@ class Album(SeoModel):
     is_published = models.BooleanField(default=False)
     title = models.CharField(max_length=128)
     reference = models.CharField(max_length=32)
+    cover = models.ForeignKey(
+        'renderer.MasterImage',
+        related_name='catalog_album_cover'
+    )
     sections = models.ManyToManyField('Section')
     artists = models.ManyToManyField('Artist')
     itunes_url = models.URLField()
@@ -31,9 +45,14 @@ class Album(SeoModel):
     musicological_text = MarkdownField()
     instrument_name = models.CharField(max_length=255)
     instrument_text = MarkdownField()
+    instrument_photo = models.ForeignKey(
+        'renderer.MasterImage',
+        related_name='catalog_album_instrument_photo',
+        blank=True,
+        null=True
+    )
     track_list = MarkdownField()
     press_review = MarkdownField()
-    cover = models.ForeignKey('renderer.MasterImage')
 
     def __str__(self):
         return '{} - {}'.format(self.reference, self.title)

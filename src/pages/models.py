@@ -4,9 +4,22 @@ from harmonic.mixins import SeoModel
 from solo.models import SingletonModel
 
 
+class DefaultBackground(SingletonModel):
+    background = models.ForeignKey(
+        'renderer.MasterImage',
+        blank=True,
+        null=True
+    )
+
+
 class Page(SeoModel):
     slug = models.SlugField()
     title = models.CharField(max_length=128)
+    background = models.ForeignKey(
+        'renderer.MasterImage',
+        blank=True,
+        null=True
+    )
     content = MarkdownField()
 
     class Meta:

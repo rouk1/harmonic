@@ -5,7 +5,6 @@ from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import html2text
-from PIL import Image
 from catalog.models import Section, Artist, Album
 from django.core.files.base import File
 from django.db import transaction
@@ -33,6 +32,20 @@ def copy_seo_data(target, data):
     translation.activate('fr')
     target.seo_description = data.description_fr
     translation.deactivate()
+
+
+def make_master_image(path, legacy_path, alternate_text):
+    image_path = os.path.join(path, '..', legacy_path)
+    image_path = os.path.normpath(image_path)
+
+    with open(image_path, 'rb') as img:
+        master_image = MasterImage(
+            alternate_text=alternate_text
+        )
+        master_image.master.save(os.path.basename(legacy_path), File(img))
+        master_image.save()
+
+    return master_image
 
 
 def import_page(name, path):
@@ -82,9 +95,13 @@ def import_page(name, path):
             p.title = data.title_fr
             translation.deactivate()
 
-            # FIXME store background image
             if hasattr(data, 'background'):
-                pass
+                img = make_master_image(
+                    path,
+                    data.background,
+                    '{}-background'.format(data.title_en)
+                )
+                p.background = img
 
             p.save()
 
@@ -109,9 +126,13 @@ def import_section(name, path):
         s.title = data.title_fr
         translation.deactivate()
 
-        # FIXME store background image
         if hasattr(data, 'background'):
-            pass
+            img = make_master_image(
+                path,
+                data.background,
+                '{}-background'.format(data.title_en)
+            )
+            s.background = img
 
         s.save()
 
@@ -131,9 +152,9 @@ def import_artist(name, path):
         a.bio = html2text.html2text(data.bio_fr)
         translation.deactivate()
 
-        # FIXME store image
         if hasattr(data, 'photo'):
-            pass
+            master_image = make_master_image(path, data.photo, a.name)
+            a.photo = master_image
 
         a.save()
 
@@ -169,20 +190,16 @@ def import_album(name, path):
         a.press_review = html2text.html2text(data.review_fr)
         translation.deactivate()
 
-        cover_path = os.path.join(path, '..', data.cover)
-        cover_path = os.path.normpath(cover_path)
+        cover = make_master_image(path, data.cover, a.reference)
+        a.cover = cover
 
-        #test file
-        img = Image.open(cover_path)
-        img.verify()
-
-        with open(cover_path, 'rb') as cover:
-            master_image = MasterImage(
-                alternate_text='{}-cover'.format(a.reference)
+        if hasattr(data, 'instrument_photo') and isinstance(data.instrument_photo, str):
+            instrument_photo = make_master_image(
+                path,
+                data.instrument_photo,
+                '{}-instrument'.format(a.reference)
             )
-            master_image.master.save(os.path.basename(data.cover), File(cover))
-            master_image.save()
-            a.cover = master_image
+            a.instrument_photo = instrument_photo
 
         a.save()
 
@@ -193,10 +210,6 @@ def import_album(name, path):
 
         for artist in data.artist:
             a.artists.add(Artist.objects.get(name__iexact=artist))
-
-
-            # a.cover = data.cover
-            # a.instrument_photo = data.instrument_photo
 
 
 @transaction.atomic

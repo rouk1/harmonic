@@ -11,8 +11,8 @@ from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
 from django.shortcuts import render
 from legacy.importer import ImportLegacyDatabaseForm, import_zip
-from pages.admin import PageAdmin, HomePageAdmin
-from pages.models import Page, HomePage
+from pages.admin import PageAdmin, HomePageAdmin, DefaultBackgroundAdmin
+from pages.models import Page, HomePage, DefaultBackground
 from renderer.admin import MasterImageAdmin
 from renderer.models import MasterImage
 
@@ -64,6 +64,7 @@ site.register(Group, GroupAdmin)
 site.register(MasterImage, MasterImageAdmin)
 
 # pages
+site.register(DefaultBackground, DefaultBackgroundAdmin)
 site.register(Page, PageAdmin)
 site.register(HomePage, HomePageAdmin)
 
