@@ -1,4 +1,5 @@
 from django.db import models
+from modeltranslation.translator import TranslationOptions
 
 
 class SeoModel(models.Model):
@@ -13,7 +14,10 @@ class SeoAdmin(object):
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(SeoAdmin, self).get_fieldsets(request, obj)
 
-        seo_fields = ('seo_description', 'seo_keywords',)
+        seo_fields = []
+        for (name, fieldset) in fieldsets:
+            seo_fields.extend(filter(lambda f: 'seo' in f, fieldset['fields']))
+
         for (name, fieldset) in fieldsets:
             fieldset['fields'] = [field for field in fieldset['fields'] if field not in seo_fields]
         return fieldsets + [
@@ -22,6 +26,7 @@ class SeoAdmin(object):
                 'fields': seo_fields,
             })
         ]
+
 
 class PublishableMixin(object):
     actions = ['make_published', 'make_unpublished']

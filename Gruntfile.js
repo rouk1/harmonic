@@ -74,7 +74,7 @@ module.exports = function (grunt) {
           interrupt: true
         }
       },
-      sass: {
+      scss: {
         files: [
           'src/assets/scss/**/*.scss'
         ],
