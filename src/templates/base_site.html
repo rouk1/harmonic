@@ -1,7 +1,9 @@
 {% load staticfiles i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html
+    lang="{{ LANGUAGE_CODE }}"
+    style="{% block html_style %}{% endblock %}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -16,7 +18,7 @@
         <![endif]-->
         <header>
             <div class="logo">
-                <a href="{% url 'pages:index' %}">
+                <a href="{% url 'pages:home' %}">
                     <span class="harmonic">HARMONIC</span>
                     <span class="classics">CLASSICS</span>
                 </a>

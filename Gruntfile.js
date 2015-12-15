@@ -70,15 +70,14 @@ module.exports = function (grunt) {
           'src/templates/**/*.html'
         ],
         options: {
-          livereload: true,
-          interrupt: true
+          livereload: true
         }
       },
       scss: {
         files: [
           'src/assets/scss/**/*.scss'
         ],
-        tasks: ['sass:dev']
+        tasks: ['sass:dist']
       }
     },
 

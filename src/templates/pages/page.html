@@ -1,6 +1,10 @@
 {% extends "base_site.html" %}
 {% load staticfiles harmonic %}
 
+{% block html_style %}
+background: url({{ background.get_master_url }}) no-repeat center center fixed;
+{% endblock %}
+
 {% block head %}
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ page.seo_description }}"/>

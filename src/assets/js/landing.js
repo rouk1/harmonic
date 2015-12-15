@@ -1,3 +1,3 @@
-var toto = 456
+var toto = 42
 
 console.log(`hello babel ${toto} !`)
