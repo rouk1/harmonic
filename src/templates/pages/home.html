@@ -1,2 +1,35 @@
 {% extends "pages/page.html" %}
 {% load staticfiles harmonic %}
+
+{% block head_title %}HARMONIC CLASSICS{% endblock %}
+
+{% block content %}
+<div class="home">
+    <div class="lead">{{ page.content|markdown }}</div>
+    {% for push in pushes %}
+        <div class="push">{{ push.content|markdown }}</div>
+    {% endfor %}
+    <div class="items">
+        <div class="row">
+            {% for item in items %}
+                {% if item|klass == 'Section' %}
+                    <div class="item section">
+                        <h2>{{ item.title }}</h2>
+                    </div>
+                {% elif item|klass == 'Page' %}
+                    <div
+                        class="item page"
+                        style="background-image: url('{{ item.background.get_rendition_url 0, 150 }}');">
+                        <h2>{{ item.title }}</h2>
+                    </div>
+                {% endif %}
+                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </div>
+                    {% if not forloop.last %}
+                        <div class="row">
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

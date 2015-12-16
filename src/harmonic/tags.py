@@ -8,3 +8,8 @@ register = template.Library()
 @register.filter
 def markdown(value):
     return mark_safe(markdown2.markdown(value))
+
+
+@register.filter('klass')
+def klass(obj):
+    return obj.__class__.__name__

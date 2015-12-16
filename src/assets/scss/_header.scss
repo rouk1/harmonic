@@ -1,3 +1,17 @@
 header {
-    height: 50px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+    height: $header-heigth;
+    line-height: $header-heigth;
+
+    background-color: rgba(0, 0, 0, 0.66);
+    text-align: center;
+
+    a,
+    a:hover {
+        color: white;
+        text-decoration: none;
+    }
 }

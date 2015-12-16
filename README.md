@@ -8,7 +8,7 @@ mobile friendly with django, sass and browserify
 brew install node
 npm install -g grunt
 npm install
-pyenv venv
+pyvenv venv
 source venv/bin/activate
 pip install -r requirements.txt
 python src/manage.py migrate

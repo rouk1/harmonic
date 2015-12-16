@@ -49,7 +49,7 @@ $enable-shadows:            false !default;
 $enable-gradients:          false !default;
 $enable-transitions:        false !default;
 $enable-hover-media-query:  false !default;
-$enable-grid-classes:       true !default;
+$enable-grid-classes:       false !default;
 
 
 // Spacing
@@ -670,12 +670,16 @@ $pre-scrollable-max-height:   340px !default;
 
 @import "../../../node_modules/bootstrap/scss/reboot";
 @import "../../../node_modules/bootstrap/scss/type";
-@import "../../../node_modules/bootstrap/scss/images";
-@import "../../../node_modules/bootstrap/scss/code";
+// @import "../../../node_modules/bootstrap/scss/images";
+// @import "../../../node_modules/bootstrap/scss/code";
 @import "../../../node_modules/bootstrap/scss/grid";
-@import "../../../node_modules/bootstrap/scss/tables";
-@import "../../../node_modules/bootstrap/scss/forms";
-@import "../../../node_modules/bootstrap/scss/buttons";
+// @import "../../../node_modules/bootstrap/scss/tables";
+// @import "../../../node_modules/bootstrap/scss/forms";
+// @import "../../../node_modules/bootstrap/scss/buttons";
+
+
+$header-heigth: 50px;
 
 @import "layout";
 @import "header";
+@import "home";

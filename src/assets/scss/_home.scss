@@ -1,0 +1,42 @@
+.home {
+    @include make-container();
+
+    .lead,
+    .push,
+    .items {
+        background-color: rgba(0, 0, 0, 0.33);
+        color: white;
+    }
+
+    .lead {
+
+    }
+
+    .push {
+
+    }
+
+    .items {
+
+        .row {
+            @include make-row();
+
+            .item {
+                @include make-col();
+                height: 150px;
+
+                @media (max-width: map-get($grid-breakpoints, "md")) {
+                    @include make-col-span(12);
+                }
+
+                @media (min-width: map-get($grid-breakpoints, "md") + 1) {
+                    @include make-col-span(4);
+                }
+
+                h2 {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

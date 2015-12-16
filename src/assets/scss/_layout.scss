@@ -4,3 +4,9 @@ html {
     -o-background-size: cover;
     background-size: cover;
 }
+
+.site-wrapper {
+    @include make-container();
+
+    padding-top: $header-heigth;
+}
