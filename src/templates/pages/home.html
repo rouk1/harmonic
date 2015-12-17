@@ -1,5 +1,5 @@
 {% extends "pages/page.html" %}
-{% load staticfiles harmonic %}
+{% load staticfiles harmonic renderer %}
 
 {% block head_title %}HARMONIC CLASSICS{% endblock %}
 
@@ -12,17 +12,11 @@
     <div class="items">
         <div class="row">
             {% for item in items %}
-                {% if item|klass == 'Section' %}
-                    <div class="item section">
-                        <h2>{{ item.title }}</h2>
-                    </div>
-                {% elif item|klass == 'Page' %}
-                    <div
-                        class="item page"
-                        style="background-image: url('{{ item.background.get_rendition_url 0, 150 }}');">
-                        <h2>{{ item.title }}</h2>
-                    </div>
-                {% endif %}
+                <a
+                    class="item page"
+                    style="background-image: url('{% if item.background %}{% rendition_url item.background 0 300 %}{% else %}{% rendition_url background 0 300 %}{% endif %}');">
+                    <div>{{ item.title }}</div>
+                </a>
                 {% if forloop.counter|divisibleby:3 or forloop.last %}
                     </div>
                     {% if not forloop.last %}
